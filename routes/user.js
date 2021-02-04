@@ -36,7 +36,7 @@ router.post(
     try {
       dbConnection = dbService.getDbServiceInstance();
       let id = await dbConnection.getAccountsByUsername(username);
-      if (-1 !== id) {
+      if (-1 !== id[0].id) {
         return res.status(400).json({ msg: "This username is already in use" });
       }
 
@@ -65,15 +65,24 @@ router.post(
   }
 );
 
+router.get("/login", async (req, res) => {
+  const { username, password } = req.body;
+  let dbConnection = dbService.getDbServiceInstance();
 
-// router.get(
-//     '/login',
-//     async(req, res) => {
-//        const { username, password } = req.body;
+  let account = await dbConnection.getAccountsByUsername(username);
 
-       
-//        let isCorrectPassword = await bcrypt.compare(password)
-//     }
-// )
+  if (account[0].id === -1) {
+    return res.status(400).json({ msg: "Incorrect username" });
+  }
+  let hashPassword = account[0].password;
+
+  let isCorrectPassword = await bcrypt.compare(password, hashPassword);
+
+  if (!isCorrectPassword) {
+    return res.status(400).json({ msg: "Incorrect password" });
+  } else {
+    return res.status(200).json({ msg: "Logged in" });
+  }
+});
 
 module.exports = router;

@@ -39,7 +39,7 @@ class DbService {
         });
       });
 
-      return response[0].id;
+      return response;
     } catch (error) {
       console.log(error);
     }
@@ -70,7 +70,7 @@ class DbService {
           if (error) {
             reject(new Error(error.message));
           }
-          
+
           if (results.length == 0) {
             resolve([{ id: -1 }]);
           } else {
