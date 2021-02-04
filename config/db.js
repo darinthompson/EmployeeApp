@@ -31,15 +31,15 @@ class DbService {
           }
           if (results.length == 0) {
             console.log("No existing account found");
-            resolve(1);
+            resolve([{ id: -1 }]);
           } else {
             console.log(`Existing account found ID: ${results[0].id}`);
-            resolve(-1);
+            resolve(results);
           }
         });
       });
 
-      return response;
+      return response[0].id;
     } catch (error) {
       console.log(error);
     }
@@ -70,10 +70,11 @@ class DbService {
           if (error) {
             reject(new Error(error.message));
           }
-          if (results.length > 0) {
-            resolve(results);
-          } else {
+          
+          if (results.length == 0) {
             resolve([{ id: -1 }]);
+          } else {
+            resolve(results);
           }
         });
       });

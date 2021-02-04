@@ -10,7 +10,7 @@ const dbService = require("../config/db");
 var employeeId = 4;
 
 router.post(
-  "/",
+  "/create",
   [
     check("username", "Username is required").not().isEmpty(),
     check("password", "Please enter a valid password").not().isEmpty(),
@@ -36,13 +36,13 @@ router.post(
     try {
       dbConnection = dbService.getDbServiceInstance();
       let id = await dbConnection.getAccountsByUsername(username);
-      if (-1 == id) {
+      if (-1 !== id) {
         return res.status(400).json({ msg: "This username is already in use" });
       }
 
       let newEmployee = new Employee(firstName, lastName, email);
       let checkId = await dbConnection.getEmployeeIdByEmail(newEmployee.email);
-      if (checkId[0] !== -1) {
+      if (checkId !== -1) {
         return res.status(400).json({ msg: "Email already in use" });
       }
       await dbConnection.createEmployee(newEmployee);
@@ -64,5 +64,16 @@ router.post(
     }
   }
 );
+
+
+// router.get(
+//     '/login',
+//     async(req, res) => {
+//        const { username, password } = req.body;
+
+
+//        let isCorrectPassword = await bcrypt.compare(password)
+//     }
+// )
 
 module.exports = router;
