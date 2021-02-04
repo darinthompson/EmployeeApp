@@ -36,7 +36,7 @@ router.post(
     try {
       dbConnection = dbService.getDbServiceInstance();
       let id = await dbConnection.getAccountsByUsername(username);
-      if (-1 !== id[0].id) {
+      if (-1 !== id[0].ID) {
         return res.status(400).json({ msg: "This username is already in use" });
       }
 
@@ -56,7 +56,7 @@ router.post(
       let account = new Account(username, password, sqlEmployeeId, roleId);
       const salt = await bcrypt.genSalt(10);
       account.password = await bcrypt.hash(password, salt);
-
+      console.log(account);
       dbConnection.createAccount(account);
       res.status(200).json({ msg: "Account created successfully" });
     } catch (error) {
@@ -74,7 +74,7 @@ router.get("/login", async (req, res) => {
   if (account[0].id === -1) {
     return res.status(400).json({ msg: "Incorrect username" });
   }
-  let hashPassword = account[0].password;
+  let hashPassword = account[0].PASSWORD;
 
   let isCorrectPassword = await bcrypt.compare(password, hashPassword);
 
@@ -83,6 +83,17 @@ router.get("/login", async (req, res) => {
   } else {
     return res.status(200).json({ msg: "Logged in" });
   }
+});
+
+router.post("/delete/user", async (req, res) => {
+  const { username } = req.body;
+
+  let dbConnection = dbService.getDbServiceInstance();
+
+  let result = await dbConnection.deleteEmployeeAndAccount(username);
+  console.log(result);
+
+  res.status(200).json({ msg: "Account deleted successfully" });
 });
 
 module.exports = router;
