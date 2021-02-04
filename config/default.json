@@ -1,0 +1,6 @@
+{
+    "sqlHost": "localhost",
+    "sqlUser": "root",
+    "sqlPassword": "root",
+    "sqlDatabase": "employeedb"
+}

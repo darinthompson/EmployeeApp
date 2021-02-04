@@ -55,8 +55,8 @@ CREATE TABLE IF NOT EXISTS `job` (
   `employee_id` INT NOT NULL,
   `location_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_job_employee1_idx` (`employee_id` ASC) VISIBLE,
-  INDEX `fk_job_location1_idx` (`location_id` ASC) VISIBLE,
+  INDEX `fk_job_employee1_idx` (`employee_id` ASC),
+  INDEX `fk_job_location1_idx` (`location_id` ASC),
   CONSTRAINT `fk_job_employee1`
     FOREIGN KEY (`employee_id`)
     REFERENCES `employee` (`id`)
@@ -95,8 +95,8 @@ CREATE TABLE IF NOT EXISTS `account` (
   `role_id` INT NOT NULL,
   `employee_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_account_role_idx` (`role_id` ASC) VISIBLE,
-  INDEX `fk_account_employee1_idx` (`employee_id` ASC) VISIBLE,
+  INDEX `fk_account_role_idx` (`role_id` ASC),
+  INDEX `fk_account_employee1_idx` (`employee_id` ASC),
   CONSTRAINT `fk_account_role`
     FOREIGN KEY (`role_id`)
     REFERENCES `role` (`id`)
