@@ -7,7 +7,7 @@ app.use(express.json({extended: false}));
 
 app.get('/', (req, res) => res.send('Application running'));
 
-app.use('/user/create', require('./routes/user'));
+app.use('/user', require('./routes/user'));
 
 
 
