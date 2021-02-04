@@ -7,7 +7,7 @@ const connection = mySql.createConnection({
   user: config.get("sqlUser"),
   password: config.get("sqlPassword"),
   database: config.get("sqlDatabase"),
-  insecureAuth: true
+  insecureAuth: true,
 });
 
 connection.connect((err) => {
@@ -25,7 +25,7 @@ class DbService {
   async getAccountsByUsername(username) {
     try {
       const response = await new Promise((resolve, reject) => {
-        let query = `select * from account where username = '${username}'`;
+        let query = `select * from account where username = '${username}' and active_yn = 'Y'`;
         connection.query(query, (err, results) => {
           if (err) {
             reject(new Error(err.message));
@@ -39,7 +39,6 @@ class DbService {
           }
         });
       });
-
       return response;
     } catch (error) {
       console.log(error);
@@ -66,12 +65,12 @@ class DbService {
   async getEmployeeIdByEmail(email) {
     try {
       const response = await new Promise((resolve, reject) => {
-        let sql = `select id from employee where email = '${email}'`;
+        let sql = `select id from employee where email = '${email}' and active_yn = 'Y'`;
         connection.query(sql, (error, results) => {
           if (error) {
             reject(new Error(error.message));
           }
-
+          console.log(results);
           if (results.length == 0) {
             resolve([{ id: -1 }]);
           } else {
@@ -96,11 +95,27 @@ class DbService {
           resolve(result);
         });
       });
-      console.log(response);
       return response;
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async deleteEmployeeAndAccount(username){
+      try {
+          const response = await new Promise((resolve, reject) => {
+            let sql = `call deleteRecords('${username}')`;
+            connection.query(sql, (error, result) => {
+              if (error) {
+                reject(new Error(error.sqlMessage));
+              }
+              resolve(result);
+            });
+          });
+          return response;
+      } catch (error) {
+          console.log(error);
+      }
   }
 }
 
