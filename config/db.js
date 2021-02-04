@@ -7,6 +7,7 @@ const connection = mySql.createConnection({
   user: config.get("sqlUser"),
   password: config.get("sqlPassword"),
   database: config.get("sqlDatabase"),
+  insecureAuth: true
 });
 
 connection.connect((err) => {
