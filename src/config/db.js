@@ -22,9 +22,11 @@ class DbService {
     return instance ? instance : new DbService();
   }
 
+  // User Calls
   async getAccountsByUsername(username) {
     try {
       const response = await new Promise((resolve, reject) => {
+        console.log(username);
         let query = `select * from account where username = '${username}' and active_yn = 'Y'`;
         connection.query(query, (err, results) => {
           if (err) {
@@ -101,21 +103,59 @@ class DbService {
     }
   }
 
-  async deleteEmployeeAndAccount(username){
-      try {
-          const response = await new Promise((resolve, reject) => {
-            let sql = `call deleteRecords('${username}')`;
-            connection.query(sql, (error, result) => {
-              if (error) {
-                reject(new Error(error.sqlMessage));
-              }
-              resolve(result);
-            });
-          });
-          return response;
-      } catch (error) {
-          console.log(error);
-      }
+  async deleteEmployeeAndAccount(username) {
+    try {
+      const response = await new Promise((resolve, reject) => {
+        let sql = `call deleteRecords('${username}')`;
+        connection.query(sql, (error, result) => {
+          if (error) {
+            reject(new Error(error.sqlMessage));
+          }
+          resolve(result);
+        });
+      });
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // Job Calls
+
+  async createJob(description, employeeId, locationId){
+    try {
+      console.log(description, employeeId, locationId);
+      const response = await new Promise((resolve, reject) => {
+        let sql = `insert into job(description, employee_id, location_id) values ('${description}', ${employeeId}, ${locationId})`;
+        connection.query(sql, (error, results) => {
+          if(error){
+            reject(new Error(error.sqlMessage));
+          }
+          resolve(results);
+        });
+      });
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async completeJob(jobId){
+    try {
+      const response = await new Promise((resolve, reject) => {
+        let sql = `update job set MODIFIED_DATE = now(), COMPLETED_YN = 'Y' where ID = ${jobId}`;
+        connection.query(sql, (error, results) => {
+          if(error){
+            reject(new Error(error.message));
+          }
+          resolve(results);
+        });
+      });
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 

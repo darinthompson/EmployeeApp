@@ -1,18 +1,16 @@
 <template>
-<div>
-<HelloWorld msg="Employee App"/>
+<div id="app">
+  <router-link to="/">Home</router-link>
+<router-view />
 </div>
   
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
 }
 </script>
 
