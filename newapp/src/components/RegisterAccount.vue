@@ -15,7 +15,7 @@
 <script>
 import authService from '../service/authService'
 export default {
-  name: "HelloWorld",
+  name: "RegisterAccount",
   props: {
     msg: String,
   },

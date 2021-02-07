@@ -1,5 +1,4 @@
 const express = require("express");
-const createConnection = require("./config/db");
 const app = express();
 const appConfig = (req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:8080");
@@ -19,6 +18,7 @@ app.use(express.json({ extended: false }));
 app.get("/", (req, res) => res.send("Application running"));
 
 app.use("/user", require("./routes/user"));
+app.use("/job", require("./routes/job"));
 
 const PORT = process.env.PORT || 3000;
 

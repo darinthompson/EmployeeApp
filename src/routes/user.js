@@ -65,7 +65,7 @@ router.post(
   }
 );
 
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   const { username, password } = req.body;
   let dbConnection = dbService.getDbServiceInstance();
 
@@ -81,7 +81,7 @@ router.get("/login", async (req, res) => {
   if (!isCorrectPassword) {
     return res.status(400).json({ msg: "Incorrect password" });
   } else {
-    return res.status(200).json({ msg: "Logged in" });
+    return res.status(200).json(account);
   }
 });
 
